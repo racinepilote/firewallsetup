@@ -44,17 +44,24 @@ echo 1 > /proc/sys/net/ipv4/conf/all/log_martians
 /sbin/iptables -A INPUT -p tcp --dport 22 -m state --state NEW -m recent --update --seconds 60 --hitcount 4 -j DROP
 /sbin/iptables -A INPUT -p tcp --dport 22 -m state --state NEW -m recent --set
 /sbin/iptables -A INPUT -p tcp --dport 22 -m state --state NEW -j ACCEPT
+/sbin/iptables -A INPUT -p tcp --dport 2849 -m state --state NEW -m recent --update --seconds 60 --hitcount 4 -j DROP
+/sbin/iptables -A INPUT -p tcp --dport 2849 -m state --state NEW -m recent --set
+/sbin/iptables -A INPUT -p tcp --dport 2849 -m state --state NEW -j ACCEPT
  
 # Allow certain ports to be accessible from the outside
 #/sbin/iptables -A INPUT -p tcp --dport 25565 -m state --state NEW -j ACCEPT  #Minecraft
 #/sbin/iptables -A INPUT -p tcp --dport 8123 -m state --state NEW -j ACCEPT   #Dynmap plugin
 
 # Other rules for future use if needed.  Uncomment to activate
-# /sbin/iptables -A INPUT -p tcp --dport 80 -m state --state NEW -j ACCEPT    # http
-# /sbin/iptables -A INPUT -p tcp --dport 443 -m state --state NEW -j ACCEPT   # https
+/sbin/iptables -A INPUT -p tcp --dport 80 -m state --state NEW -j ACCEPT    # http
+/sbin/iptables -A INPUT -p tcp --dport 443 -m state --state NEW -j ACCEPT   # https
 
 # UDP packet rule.  This is just a random udp packet rule as an example only
-# /sbin/iptables -A INPUT -p udp --dport 5021 -m state --state NEW -j ACCEPT
+/sbin/iptables -A INPUT -p udp --dport 11820 -m state --state NEW -j ACCEPT
+
+# Allow traffic on the wg0 interface (wireguard) to pass through
+/sbin/iptables -A FORWARD -i wg0 -j ACCEPT
+/sbin/iptables -A FORWARD -o wg0 -j ACCEPT
 
 # Allow pinging of your server
 /sbin/iptables -A INPUT -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
