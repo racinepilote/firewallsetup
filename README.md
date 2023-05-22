@@ -6,18 +6,39 @@ This is a script for setting up a firewall with settings for tarpitting ssh and 
 ## Download the rules to /etc/
 ```
 git clone https://github.com/ChrisTitusTech/firewallsetup.git
-````
+```
+
+- Checkout branch: like pivpn is different of master
+- Copy branch in /etc/firewallsetup
+ 
 ## Make the Rules Permenant
 ### Debian-based Distributions
 ```
-sudo apt install iptables-persistent
-sudo /etc/init.d/netfilter-persistent save
+sudo su
+apt install iptables-persistent
+/etc/init.d/netfilter-persistent save
 ```
 ### Arch Linux Distributions
 *Use iptable-save which is pre-installed*
+
+## Make the script executable
 ```
-sudo iptables-save > /etc/iptables/iptables.rules
+cd /etc/firewallsetup
+chmod +x firewall*
 ```
+
+```
+systemctl enable iptables
+systemctl enable ip6tables
+sudo ./etc/firewallsetup/firewall
+```
+
+```
+sudo iptables-save > /etc/iptables/rules.v4
+sudo iptables-save > /etc/iptables/rules.v6
+```
+
+
 ### RHEL / CentOS Distributions
 *This is by far the simpliest way to save rules and check them # chkconfig --list | grep iptables*
 
